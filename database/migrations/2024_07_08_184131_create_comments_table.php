@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->text('text'); // Text column
-            $table->timestamp('date'); // Date column
-            $table->string('author'); // Author column
-            $table->foreignId('event_id')->nullable()->constrained()->onDelete('cascade'); // Event foreign key
-            $table->timestamps(); // Timestamps
+            $table->text('text');
+            $table->timestamp('date');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('event_id')->nullable()->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

@@ -17,7 +17,7 @@ return new class extends Migration
         $table->text('description')->nullable(); // Description column
         $table->timestamp('date'); // Date column
         $table->string('location'); // Location column
-        $table->string('organizer'); // Organizer column
+        $table->foreignId('user_id')->constrained();
         $table->timestamps(); // Timestamps
         });
     }
