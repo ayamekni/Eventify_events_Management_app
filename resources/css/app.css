@@ -1,0 +1,118 @@
+/* custom.css */
+
+/* Fonts */
+body {
+    font-family: 'Figtree', sans-serif;
+}
+
+/* Background */
+body, .min-h-screen {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #333;
+}
+
+/* Center Content */
+.min-h-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Card */
+.sm\\:max-w-md {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.2s ease-in-out;
+    width: 100%;
+    max-width: 400px;
+}
+
+.sm\\:max-w-md:hover {
+    transform: translateY(-5px);
+}
+
+/* Buttons */
+button {
+    background-color: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #4f46e5;
+}
+
+/* Input Fields */
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    border: 1px solid #d1d5db;
+    padding: 8px;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 10px;
+    transition: border-color 0.3s ease;
+    font-size: 14px;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+    border-color: #6366f1;
+    outline: none;
+}
+
+/* Labels */
+label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Links */
+a {
+    color: #6366f1;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #4f46e5;
+}
+
+/* Misc */
+.mt-4, .mt-6 {
+    margin-top: 1rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.pt-6 {
+    padding-top: 1.5rem;
+}
+
+.sm\\:pt-0 {
+    padding-top: 0;
+}
+
+/* Form Wrapper */
+.form-wrapper {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}

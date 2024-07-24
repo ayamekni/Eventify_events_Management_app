@@ -5,17 +5,39 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class Event extends Model
 {
-    public function users(): BelongsToMany
+    use HasFactory;
+    
+    protected $fillable = [
+        'title', 'date', 'location', 'description',
+        // Add more attributes here if needed
+    ];
+
+    public function createdByUser()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class, 'created_by');
     }
-    public function groups(): BelongsToMany
+
+    public function registrations()
     {
-        return $this->belongsToMany(Group::class);
-    }    
+        return $this->hasMany(Registration::class);
+    }
+
+
+
+    public function isOver()
+    {
+        // Get the current date
+        $now = Carbon::now();
+        
+        // Convert the event date to a Carbon instance
+        $eventDate = Carbon::createFromFormat('Y-m-d', $this->date);
+
+        // Check if the event date is in the past
+        return $eventDate->isPast();
+    }
+
 
 }
