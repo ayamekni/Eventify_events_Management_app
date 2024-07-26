@@ -12,14 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-        $table->id();
-        $table->string('title'); // Title column
-        $table->text('description')->nullable(); // Description column
-        $table->timestamp('date'); // Date column
-        $table->string('location'); // Location column
-        $table->foreignId('user_id')->constrained();
-        $table->timestamps(); // Timestamps
+            $table->id();
+            $table->string('title');
+            $table->text('description');
+            $table->date('date');
+            $table->string('location');
+            $table->unsignedBigInteger('user_id'); // Foreign key for user
+            $table->timestamps();
+        
+            // Add foreign key constraint if needed
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+        
     }
 
     /**

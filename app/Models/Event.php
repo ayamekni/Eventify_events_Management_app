@@ -11,18 +11,17 @@ class Event extends Model
     use HasFactory;
     
     protected $fillable = [
-        'title', 'date', 'location', 'description',
-        // Add more attributes here if needed
+        'title',
+        'description',
+        'date',
+        'location',
+        'user_id', // Add user_id here
     ];
 
-    public function createdByUser()
+    // Optionally, define relationships if needed
+    public function user()
     {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function registrations()
-    {
-        return $this->hasMany(Registration::class);
+        return $this->belongsTo(User::class);
     }
 
 

@@ -2,62 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Models\Event;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class EventController extends Controller
 {
-    /**
-     * Show the form for creating a new event.
-     */
+    // Display a listing of the events
+    public function index()
+    {
+        $events = Event::all(); // Fetch all events
+        return view('events.index', compact('events'));
+    }
+
+    // Show the form for creating a new event
     public function create()
     {
         return view('events.create');
     }
 
-    /**
-     * Store a newly created event in the database.
-     */
+    // Store a newly created event in storage
     public function store(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'date' => 'required|date',
+        'location' => 'required|string|max:255',
+    ]);
+
+    // Get the currently authenticated user
+    $userId = auth()->id();
+    
+
+    // Create a new event with the user_id
+    
+    Event::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'date' => $request->date,
+        'location' => $request->location,
+        'user_id' => Auth::id(),  // Set the user_id to the authenticated user's ID
+    ]);
+
+    return redirect()->route('events.index')->with('success', 'Event created successfully!');
+}
+
+    // Display the specified event
+  
+
+    // Show the form for editing the specified event
+    public function edit($id)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'date' => 'required|date',
-            'location' => 'required|string|max:255',
-        ]);
-
-        Event::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'date' => $request->date,
-            'location' => $request->location,
-        ]);
-
-        return redirect()->route('events.index')->with('success', 'Event created successfully!');
+        $event = Event::findOrFail($id);
+        return view('updateEvent', compact('event'));
+    }
+    public function getUniqueLocations()
+    {
+        $uniqueLocations = Event::distinct()->pluck('location');
+        return $uniqueLocations;
     }
 
-    /**
-     * Display a listing of the events.
-     */
-    public function index()
-    {
-        $events = Event::all();
-        return view('index', compact('events'));
-    }
-
-    /**
-     * Show the form for editing the specified event.
-     */
-    public function edit(Event $event)
-    {
-        return view('events.edit', compact('event'));
-    }
-
-    /**
-     * Update the specified event in the database.
-     */
+    // Update the specified event in storage
     public function update(Request $request, Event $event)
     {
         $request->validate([
@@ -77,24 +84,37 @@ class EventController extends Controller
         return redirect()->route('events.index')->with('success', 'Event updated successfully!');
     }
 
-    /**
-     * Remove the specified event from the database.
-     */
+    // Remove the specified event from storage
     public function destroy(Event $event)
     {
         $event->delete();
-        return redirect()->route('index')->with('success', 'Event deleted successfully!');
+        return redirect()->route('events.index')->with('success', 'Event deleted successfully!');
     }
 
-    /**
-     * Display the browse events page.
-     */
-    public function browse(Request $request)
+    // Additional method for browsing events (optional)
+    public function browse()
     {
-        // Log the request data for debugging
-        Log::debug('Browse Events Request:', $request->all());
-
-        $events = Event::all();
+        $events = Event::all(); // Fetch all events
         return view('events.browse', compact('events'));
     }
+
+
+    // In EventController.php
+public function show($id)
+{
+    $event = Event::findOrFail($id); // Find the event or fail if not found
+    return view('events.show', compact('event')); // Pass the event to the view
+}
+
+
+
+public function join(Request $request, $id)
+{
+    $event = Event::findOrFail($id);
+
+    // Handle the logic for joining the event
+    // For example, you could save a record in a pivot table or send a notification
+
+    return redirect()->route('events.browse')->with('success', 'You have successfully joined the event!');
+}
 }
