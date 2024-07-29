@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
+ 
+ 
+    public function home()
+    {
+        $events = Event::paginate(5); // Adjust pagination as needed
+        return view('welcome', compact('events'));
+    }
+ 
+ 
     // Display a listing of the events
     public function index()
     {
