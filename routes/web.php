@@ -40,8 +40,9 @@ Route::put('/events/{event}', [EventController::class, 'update'])->name('events.
 Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
 // Additional route for browsing events (optional)
-Route::get('/browse', [EventController::class, 'browse'])->name('events.browseEvents');
-
+Route::get('/events/browse', [EventController::class, 'browse'])->name('events.browse');
+Route::post('/events/{event}/join', [EventController::class, 'join'])->name('events.join');
+// Route::post('/events', [EventController::class, 'join'])->name('events.join');
 
 
 

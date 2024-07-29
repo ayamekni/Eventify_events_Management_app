@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,11 +43,6 @@ class EventController extends Controller
         'date' => 'required|date',
         'location' => 'required|string|max:255',
     ]);
-
-    // Get the currently authenticated user
-    $userId = auth()->id();
-    
-
     // Create a new event with the user_id
     
     Event::create([
@@ -112,8 +109,7 @@ class EventController extends Controller
         $event = Event::findOrFail($id); // Find the event or fail if not found
         return view('events.show', compact('event')); // Pass the event to the view
     }
-    public function browse(Request $request)
-{
+    public function browse(Request $request){
     // Log the request data for debugging
  
     
@@ -125,14 +121,44 @@ class EventController extends Controller
         $query->where('title', 'like', '%' . $request->input('search') . '%');
     }
     
+    if ($request->has('location')) {
+        $location = $request->input('location');
+        if ($location !== 'all') {
+            $query->where('location', $location);
+        }
+    }
+
     // Paginate the results
     $events = $query->paginate(5);
+
+    // Retrieve unique locations
+    $uniqueLocations = $this->getUniqueLocations();
+
+    return view('events.browse', compact('events', 'uniqueLocations'));
     
-    return view('events.browse', compact('events'));
+  
 }
 public function manage()
 {
     $events = Event::all();
     return view('events.manage', compact('events'));
 }
+
+
+public function join($id)
+    {
+        $event= Event::findOrFail($id);
+        $user=User::findOrFail(Auth::id());
+        $event->users()->attach($user);
+            
+
+        
+        return redirect()->route('events.browse')->with('success', 'event joined successfully!');
+    }
+    // public function join($id)
+    // {
+    //     $event = Event::findOrFail($id);
+    //     return view('events.join', compact('event'));
+    // }
+
 }
