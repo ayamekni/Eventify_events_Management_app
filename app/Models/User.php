@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
-    public function events(): BelongsToMany
+    public function events()
     {
-        return $this->belongsToMany(Event::class);
+        return $this->belongsToMany(Event::class, 'event_user'); // assuming a many-to-many relationship
     }
+    
 
 
     public function groups(): BelongsToMany

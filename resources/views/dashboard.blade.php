@@ -34,8 +34,8 @@
         <!-- Display different buttons based on user role -->
         @if (Auth::user()->isUser())
             <div class="flex justify-center">
-                <a href="{{ route('events.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-                    View Events
+                <a href="{{ route('events.browse') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                 Browse Events
                 </a>
             </div>
         @elseif (Auth::user()->isOrganiser())

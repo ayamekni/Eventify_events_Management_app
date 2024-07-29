@@ -31,8 +31,6 @@ Route::get('/events/create', [EventController::class, 'create'])->name('events.c
 // Store a newly created event in storage
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
 
-// Display the specified event
-Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
 // Show the form for editing the specified event
 Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
@@ -44,18 +42,17 @@ Route::put('/events/{event}', [EventController::class, 'update'])->name('events.
 Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
 // Additional route for browsing events (optional)
-Route::get('/events/browse', [EventController::class, 'browse'])->name('events.browse');
+Route::get('/browse', [EventController::class, 'browse'])->name('events.browseEvents');
 
 
 
 
-Route::post('/events/{event}/join', [EventController::class, 'join'])->name('events.join');
-});
-
-
+Route::get('/events/manage', [EventController::class, 'manage'])->name('events.manage');
 
 
 
 
 
 
+}
+);

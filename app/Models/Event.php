@@ -19,9 +19,9 @@ class Event extends Model
     ];
 
     // Optionally, define relationships if needed
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'event_user');
     }
 
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
+
 class EventController extends Controller
 {
     // Display a listing of the events
@@ -56,7 +57,7 @@ class EventController extends Controller
     public function edit($id)
     {
         $event = Event::findOrFail($id);
-        return view('updateEvent', compact('event'));
+        return view('events.update', compact('event'));
     }
     public function getUniqueLocations()
     {
@@ -92,29 +93,37 @@ class EventController extends Controller
     }
 
     // Additional method for browsing events (optional)
-    public function browse()
+  
+
+
+    // In EventController.php // Join an event
+     
+    public function show($id)
     {
-        $events = Event::all(); // Fetch all events
-        return view('events.browse', compact('events'));
+        $event = Event::findOrFail($id); // Find the event or fail if not found
+        return view('events.show', compact('event')); // Pass the event to the view
     }
-
-
-    // In EventController.php
-public function show($id)
+    public function browse(Request $request)
 {
-    $event = Event::findOrFail($id); // Find the event or fail if not found
-    return view('events.show', compact('event')); // Pass the event to the view
+    // Log the request data for debugging
+ 
+    
+    // Retrieve all events
+    $query = Event::query();
+    
+    // Apply any filters
+    if ($request->has('search')) {
+        $query->where('title', 'like', '%' . $request->input('search') . '%');
+    }
+    
+    // Paginate the results
+    $events = $query->paginate(5);
+    
+    return view('events.browse', compact('events'));
 }
-
-
-
-public function join(Request $request, $id)
+public function manage()
 {
-    $event = Event::findOrFail($id);
-
-    // Handle the logic for joining the event
-    // For example, you could save a record in a pivot table or send a notification
-
-    return redirect()->route('events.browse')->with('success', 'You have successfully joined the event!');
+    $events = Event::all();
+    return view('events.manage', compact('events'));
 }
 }
