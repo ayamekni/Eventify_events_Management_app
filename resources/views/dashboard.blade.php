@@ -3,11 +3,11 @@
 <x-app-layout>
     <x-slot name="header">
         <!-- Header Section -->
-    <nav class="bg-gray-800 dark:bg-gray-900 text-white py-4">
+        <nav class="bg-gray-800 dark:bg-gray-900 text-white py-4 w-full fixed top-0 left-0">
         <div class="container mx-auto flex items-center justify-between px-4">
             <div class="text-lg font-semibold">Event Management</div>
             <div class="space-x-4">
-                <a href="{{ route('profile.edit') }}" class="hover:bg-gray-700 px-4 py-2 rounded transition duration-300 ease-in-out">Edit Profile</a>
+            <a href="{{ route('profile.edit') }}" class="hover:bg-gray-700 px-4 py-2 rounded transition duration-300 ease-in-out">Edit Profile</a>
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf
                     <button type="submit" class="hover:bg-gray-700 px-4 py-2 rounded transition duration-300 ease-in-out">
@@ -17,6 +17,7 @@
             </div>
         </div>
     </nav>
+    
 
     <div class="py-12 bg-gray-100 dark:bg-gray-900 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

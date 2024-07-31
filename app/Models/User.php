@@ -14,8 +14,11 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Event::class, 'event_user'); // assuming a many-to-many relationship
     }
+    public function createdEvents()
+    {
+        return $this->hasMany(Event::class);
+    }
     
-
 
     public function groups(): BelongsToMany
     {

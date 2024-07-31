@@ -127,9 +127,11 @@ class EventController extends Controller
             $query->where('location', $location);
         }
     }
+    
+
 
     // Paginate the results
-    $events = $query->paginate(5);
+    $events = $query->paginate(3);
 
     // Retrieve unique locations
     $uniqueLocations = $this->getUniqueLocations();
@@ -160,5 +162,4 @@ public function join($id)
     //     $event = Event::findOrFail($id);
     //     return view('events.join', compact('event'));
     // }
-
 }

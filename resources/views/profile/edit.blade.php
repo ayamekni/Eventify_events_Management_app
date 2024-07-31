@@ -1,9 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-   
+    <nav class="bg-gray-800 dark:bg-gray-900 text-white py-4 w-full fixed top-0 left-0">
+        <div class="container mx-auto flex items-center justify-between px-4">
+            <div class="text-lg font-semibold">User Profile</div>
+            <div class="space-x-4">
+                <a href="{{ route('dashboard') }}" class="hover:bg-gray-700 px-4 py-2 rounded transition duration-300 ease-in-out">Dashboard</a>
+            </div>
+        </div>
+    </nav>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">

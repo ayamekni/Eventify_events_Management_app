@@ -37,6 +37,9 @@ class Event extends Model
         // Check if the event date is in the past
         return $eventDate->isPast();
     }
-
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
 }

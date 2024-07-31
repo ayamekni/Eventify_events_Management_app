@@ -43,6 +43,8 @@ Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('eve
 Route::get('/events/browse', [EventController::class, 'browse'])->name('events.browse');
 Route::post('/events/{event}/join', [EventController::class, 'join'])->name('events.join');
 // Route::post('/events', [EventController::class, 'join'])->name('events.join');
+// Route for cancelling event subscription
+Route::post('/events/{id}/cancel', [EventController::class, 'cancel'])->name('events.cancel');
 
 
 
