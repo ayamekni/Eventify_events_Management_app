@@ -62,12 +62,21 @@
                         <td class="py-3 px-4"> {{ $event->creator->first_name }} {{ $event->creator->last_name }}
                         </td></td>
                         <td class="py-3 px-4">
+                        @if($subscriptions->contains($event->id))
+                            <form action="{{ route('events.cancel', $event->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                                    Cancel Subscription
+                                </button>
+                            </form>
+                        @else
                             <form action="{{ route('events.join', $event->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
                                     Join
                                 </button>
                             </form>
+                        @endif
                         </td>
                     </tr>
                 @endforeach

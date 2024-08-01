@@ -127,7 +127,7 @@ class EventController extends Controller
             $query->where('location', $location);
         }
     }
-    
+    $subscriptions = Auth::user()->events->pluck('id');
 
 
     // Paginate the results
@@ -136,8 +136,8 @@ class EventController extends Controller
     // Retrieve unique locations
     $uniqueLocations = $this->getUniqueLocations();
 
-    return view('events.browse', compact('events', 'uniqueLocations'));
     
+    return view('events.browse', compact('events', 'subscriptions', 'uniqueLocations'));
   
 }
 public function manage()
@@ -152,11 +152,17 @@ public function join($id)
         $event= Event::findOrFail($id);
         $user=User::findOrFail(Auth::id());
         $event->users()->attach($user);
-            
-
-        
         return redirect()->route('events.browse')->with('success', 'event joined successfully!');
     }
+    public function cancel($id)
+    {
+        $event = Event::findOrFail($id);
+        $user = User::findOrFail(Auth::id());
+        $event->users()->detach($user);
+        return redirect()->route('events.browse')->with('success', 'Subscription canceled successfully!');
+    }
+    
+
     // public function join($id)
     // {
     //     $event = Event::findOrFail($id);
