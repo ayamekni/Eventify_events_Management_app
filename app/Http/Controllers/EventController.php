@@ -19,14 +19,22 @@ class EventController extends Controller
         $events = Event::paginate(5); // Adjust pagination as needed
         return view('welcome', compact('events'));
     }
+
+    public function dashboard()
+    {
+        $events = Event::paginate(10); // Adjust the pagination number as needed
+        return view('dashboard', compact('events'));
+    }
  
  
     // Display a listing of the events
     public function index()
-    {
-        $events = Event::all(); // Fetch all events
-        return view('events.index', compact('events'));
-    }
+{
+    $userId = Auth::id(); // Get the ID of the authenticated user
+    $events = Event::where('user_id', $userId)->get(); // Fetch events created by the user
+    return view('events.index', compact('events'));
+}
+
 
     // Show the form for creating a new event
     public function create()
@@ -61,10 +69,13 @@ class EventController extends Controller
 
     // Show the form for editing the specified event
     public function edit($id)
-    {
-        $event = Event::findOrFail($id);
-        return view('events.update', compact('event'));
+{
+    $event = Event::findOrFail($id);
+    if ($event->user_id !== Auth::id()) {
+        return redirect()->route('events.index')->with('error', 'You are not authorized to edit this event.');
     }
+    return view('events.edit', compact('event'));
+}
     public function getUniqueLocations()
     {
         $uniqueLocations = Event::distinct()->pluck('location');
@@ -103,12 +114,14 @@ class EventController extends Controller
 
 
     // In EventController.php // Join an event
-     
-    public function show($id)
-    {
-        $event = Event::findOrFail($id); // Find the event or fail if not found
-        return view('events.show', compact('event')); // Pass the event to the view
-    }
+
+  public function show($id)
+   {
+    $event = Event::with(['comments.user'])->findOrFail($id);
+    return view('events.show', compact('event'));
+   }
+
+
     public function browse(Request $request){
     // Log the request data for debugging
  
@@ -147,13 +160,36 @@ public function manage()
 }
 
 
-public function join($id)
+  public function join($id)
     {
         $event= Event::findOrFail($id);
         $user=User::findOrFail(Auth::id());
-        $event->users()->attach($user);
-        return redirect()->route('events.browse')->with('success', 'event joined successfully!');
+        $event->users()->attach($user, ['status' => 'pending']);
+        
+        return redirect()->route('events.browse')->with('success', 'your subscibtion is pending for approval');
     }
+
+
+    public function accept($eventId, $userId)
+    {
+        $event = Event::findOrFail($eventId);
+        $user = User::findOrFail($userId);
+
+        $event->users()->updateExistingPivot($user->id, ['status' => 'accepted']);
+
+        return redirect()->back()->with('success', 'User subscription accepted.');
+    }
+
+    public function refuse($eventId, $userId)
+    {
+        $event = Event::findOrFail($eventId);
+        $user = User::findOrFail($userId);
+
+        $event->users()->updateExistingPivot($user->id, ['status' => 'refused']);
+
+        return redirect()->back()->with('success', 'User subscription refused.');
+    }
+
     public function cancel($id)
     {
         $event = Event::findOrFail($id);

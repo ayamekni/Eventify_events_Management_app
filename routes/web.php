@@ -3,14 +3,11 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrationController;
-
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\EventController;
 Route::get('/', [EventController::class, 'home'])->name('home');
 
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,12 +43,15 @@ Route::post('/events/{event}/join', [EventController::class, 'join'])->name('eve
 // Route for cancelling event subscription
 Route::post('/events/{id}/cancel', [EventController::class, 'cancel'])->name('events.cancel');
 
-
+Route::post('/events/accept/{eventId}/{userId}', [EventController::class, 'accept'])->name('events.accept');
+Route::post('/events/refuse/{eventId}/{userId}', [EventController::class, 'refuse'])->name('events.refuse');
 
 Route::get('/events/manage', [EventController::class, 'manage'])->name('events.manage');
 
+Route::get('events/{id}', [EventController::class, 'show'])->name('events.show');
 
 
+Route::post('events/{id}/comments', [CommentController::class, 'store'])->name('comments.store');
 
 
 

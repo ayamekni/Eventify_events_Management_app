@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'event_user'); // assuming a many-to-many relationship
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('status')->withTimestamps(); // assuming a many-to-many relationship
     }
     public function createdEvents()
     {
@@ -67,6 +67,10 @@ public function isOrganiser()
     return $this->role === 'organiser';
 }
 
+public function getFullNameAttribute()
+{
+    return "{$this->first_name} {$this->last_name}";
+}
 
 }
 

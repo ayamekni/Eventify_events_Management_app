@@ -21,7 +21,7 @@ class Event extends Model
     // Optionally, define relationships if needed
     public function users()
     {
-        return $this->belongsToMany(User::class, 'event_user');
+        return $this->belongsToMany(User::class, 'event_user')->withPivot('status')->withTimestamps();
     }
 
 
@@ -41,5 +41,15 @@ class Event extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+ 
+    
+
+
 
 }

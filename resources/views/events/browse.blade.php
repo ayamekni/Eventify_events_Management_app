@@ -41,53 +41,53 @@
             </div>
         </form>
 
-        <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md">
-            <thead class="bg-gray-200 dark:bg-gray-700">
-                <tr>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Title</th>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Date</th>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Location</th>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Description</th>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Created by</th>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($events as $event)
-                    <tr class="border-t border-gray-200 dark:border-gray-700">
-                        <td class="py-3 px-4">{{ $event->title }}</td>
-                        <td class="py-3 px-4">{{ $event->date }}</td>
-                        <td class="py-3 px-4">{{ $event->location }}</td>
-                        <td class="py-3 px-4">{{ $event->description }}</td>
-                        <td class="py-3 px-4"> {{ $event->creator->first_name }} {{ $event->creator->last_name }}
-                        </td></td>
-                        <td class="py-3 px-4">
-                        @if($subscriptions->contains($event->id))
-                            <form action="{{ route('events.cancel', $event->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-                                    Cancel Subscription
-                                </button>
-                            </form>
-                        @else
-                            <form action="{{ route('events.join', $event->id) }}" method="POST">
-                                @csrf
+        <div class="space-y-4">
+            @foreach ($events as $event)
+                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md p-4">
+                    <h2 class="text-xl font-bold mb-2">{{ $event->title }}</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-2">{{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</p>
+                    <p class="text-gray-700 dark:text-gray-300 mb-2"><strong>Created by:</strong> {{ $event->creator->first_name }} {{ $event->creator->last_name }}</p>
+                    
+                    <div class="flex justify-between items-center">
+                        <form action="{{ route('events.join', $event->id) }}" method="POST" class="inline">
+                            @csrf
+                            @if($event->users()->where('user_id', Auth::id())->exists())
+                                @php
+                                    $subscription = $event->users()->where('user_id', Auth::id())->first()->pivot;
+                                @endphp
+
+                                @if ($subscription->status == 'pending')
+                                    <button type="button" class="bg-yellow-500 text-white px-4 py-2 rounded" disabled>
+                                        Pending Approval
+                                    </button>
+                                @elseif ($subscription->status == 'accepted')
+                                    <button type="button" class="bg-green-500 text-white px-4 py-2 rounded" disabled>
+                                        Accepted
+                                    </button>
+                                @elseif ($subscription->status == 'refused')
+                                    <button type="button" class="bg-red-500 text-white px-4 py-2 rounded" disabled>
+                                        Refused
+                                    </button>
+                                @endif
+                            @else
                                 <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
                                     Join
                                 </button>
-                            </form>
-                        @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                            @endif
+                        </form>
+                        
+                        <a href="{{ route('events.show', $event->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                            View More Details
+                        </a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
 
         <div class="mt-6">
-            <ul class="pagination">
-                {{ $events->links("pagination::bootstrap-4") }}
-            </ul>
+            {{ $events->links("pagination::bootstrap-4") }}
         </div>
     @endif
 </div>
 @endsection
+
