@@ -95,7 +95,7 @@ Focus areas:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/eventify.git
+git clone https://github.com/ayamekni/Eventify_events_Management_app
 
 # Navigate into the project folder
 cd eventify
